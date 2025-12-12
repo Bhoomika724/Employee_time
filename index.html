@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkLogger - Track your work hours with ease</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f7;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #5b5fc7;
+            background: white;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: #5b5fc7;
+            color: white;
+            width: 100%;
+            font-size: 18px;
+            padding: 18px;
+        }
+
+        .btn-primary:hover {
+            background: #4a4eb0;
+            transform: translateY(-1px);
+        }
+
+        .btn-purple {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-purple:hover {
+            background: #7c3aed;
+        }
+
+        .btn-coral {
+            background: #ff9b7d;
+            color: white;
+        }
+
+        .btn-coral:hover {
+            background: #ff8a6a;
+        }
+
+        .btn-red {
+            background: #ef4444;
+            color: white;
+            padding: 10px 16px;
+        }
+
+        .demo-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .demo-info strong {
+            color: #333;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .logout-btn {
+            padding: 12px 24px;
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #e5e7eb;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: #000;
+            line-height: 1;
+        }
+
+        .stat-icon {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            font-size: 48px;
+            opacity: 0.15;
+        }
+
+        /* Time Card */
+        .time-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .time-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .current-time {
+            font-size: 72px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .current-date {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        /* Two Column Layout */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .card h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 24px;
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .status-row:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .status-value {
+            font-weight: 700;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-incomplete {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-leave {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        /* Buttons Row */
+        .button-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .button-row .btn {
+            flex: 1;
+        }
+
+        /* Leave Card */
+        .leave-card-text {
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #f3f4f6;
+            color: #000;
+        }
+
+        .tab:hover {
+            color: #000;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            overflow-x: auto;
+        }
+
+        .table-container h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        td {
+            padding: 20px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Employee List */
+        .employee-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .employee-item {
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .employee-info {
+            flex: 1;
+        }
+
+        .employee-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .employee-email {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .employee-role {
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 24px;
+        }
+
+        .error {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .current-time {
+                font-size: 48px;
+            }
+
+            .two-col-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <h1 class="logo">WorkLogger</h1>
+            <p class="tagline">Track your work hours with ease</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">EMAIL</label>
+                    <input type="email" class="form-input" id="loginEmail" placeholder="your.email@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PASSWORD</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <div id="loginError" class="error"></div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+            </form>
+            
+            <!-- <div class="demo-info">
+                <strong>Demo Admin:</strong> admin@company.com / admin123<br>
+                <strong>Demo Employee:</strong> employee@company.com / emp123
+            </div> -->
+        </div>
+    </div>
+
+    <!-- Employee Dashboard -->
+    <div id="employeeDashboard" class="container hidden">
+        <div class="dashboard-header">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1>Welcome, <span id="userName"></span></h1>
+                    <p class="header-subtitle">Track your work hours with ease</p>
+                </div>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <div class="time-card">
+            <div class="time-label">
+                <span>⏰</span> CURRENT TIME
+            </div>
+            <div class="current-time" id="currentTime"></div>
+            <div class="current-date" id="currentDate"></div>
+        </div>
+
+        <div class="two-col-grid">
+            <div class="card">
+                <h2>Time Tracking</h2>
+                <div class="status-row">
+                    <span class="status-label">Status:</span>
+                    <span id="empStatus" class="badge"></span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Clock In:</span>
+                    <span id="clockIn" class="status-value">-</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Clock Out:</span>
+                    <span id="clockOut" class="status-value">-</span>
+                </div>
+                <div class="button-row">
+                    <button id="clockInBtn" class="btn btn-purple" onclick="clockIn()">
+                        ↗ Clock In
+                    </button>
+                    <button id="clockOutBtn" class="btn btn-coral" onclick="clockOut()">
+                        ↙ Clock Out
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Leave Management</h2>
+                <p class="leave-card-text">Mark yourself on leave so others know you're unavailable.</p>
+                <button id="markLeaveBtn" class="btn btn-purple" style="width: 100%;" onclick="markLeave()">
+                    📅 Mark Leave
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h2>📅 Attendance History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>CLOCK IN</th>
+                        <th>CLOCK OUT</th>
+                        <th>TOTAL HOURS</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeAttendanceBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="container hidden">
+        <div class="dashboard-header">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1>Admin Dashboard</h1>
+                    <p class="header-subtitle">Manage employees and attendance</p>
+                </div>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">TOTAL EMPLOYEES</div>
+                    <div class="stat-value" id="totalEmployees">0</div>
+                    <div class="stat-icon">👥</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">ACTIVE TODAY</div>
+                    <div class="stat-value" id="activeToday">0</div>
+                    <div class="stat-icon">📋</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">ON LEAVE TODAY</div>
+                    <div class="stat-value" id="onLeaveToday">0</div>
+                    <div class="stat-icon">👤</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('attendance')">All Attendance</button>
+            <button class="tab" onclick="showTab('employees')">Manage Employees</button>
+        </div>
+
+        <div id="attendanceTab" class="table-container">
+            <h2>All Attendance Records</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>EMPLOYEE</th>
+                        <th>CLOCK IN</th>
+                        <th>CLOCK OUT</th>
+                        <th>TOTAL HOURS</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="adminAttendanceBody"></tbody>
+            </table>
+        </div>
+
+        <div id="employeesTab" class="table-container hidden">
+            <div class="employee-header">
+                <h2>Employee Management</h2>
+                <button onclick="openAddEmployeeModal()" class="btn btn-purple">
+                    ➕ Add Employee
+                </button>
+            </div>
+            <div id="employeeList"></div>
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div id="addEmployeeModal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Employee</h2>
+            <form id="addEmployeeForm">
+                <div class="form-group">
+                    <label class="form-label">NAME</label>
+                    <input type="text" class="form-input" id="empName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">EMAIL</label>
+                    <input type="email" class="form-input" id="empEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PASSWORD</label>
+                    <input type="password" class="form-input" id="empPassword" required>
+                </div>
+                <div id="addEmpError" class="error"></div>
+                <div class="button-row">
+                    <button type="submit" class="btn btn-primary">Add Employee</button>
+                    <button type="button" onclick="closeAddEmployeeModal()" class="logout-btn" style="flex: 1;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let employees = [
+            { id: 1, name: 'Admin User', email: 'Harsh@performx.com', password: 'Harsh123', role: 'admin' },
+            // { id: 2, name: 'John Doe', email: 'employee@company.com', password: 'emp123', role: 'employee' }
+        ];
+        let attendance = [];
+
+        function init() {
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeEl = document.getElementById('currentTime');
+            const dateEl = document.getElementById('currentDate');
+            
+            if (timeEl) {
+                timeEl.textContent = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit',
+                    hour12: false 
+                });
+            }
+            
+            if (dateEl) {
+                dateEl.textContent = now.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = employees.find(emp => emp.email === email && emp.password === password);
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginError').textContent = '';
+                document.getElementById('loginScreen').classList.add('hidden');
+                
+                if (user.role === 'admin') {
+                    showAdminDashboard();
+                } else {
+                    showEmployeeDashboard();
+                }
+            } else {
+                document.getElementById('loginError').textContent = 'Invalid email or password';
+            }
+        });
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('employeeDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function showEmployeeDashboard() {
+            document.getElementById('employeeDashboard').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+            updateEmployeeStatus();
+            loadEmployeeAttendance();
+        }
+
+        function showAdminDashboard() {
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            updateAdminStats();
+            loadAllAttendance();
+            loadEmployeeList();
+        }
+
+        function updateEmployeeStatus() {
+            const today = new Date().toDateString();
+            const todayAttendance = attendance.find(a => 
+                a.employeeId === currentUser.id && 
+                new Date(a.date).toDateString() === today
+            );
+
+            const statusBadge = document.getElementById('empStatus');
+            const clockInBtn = document.getElementById('clockInBtn');
+            const clockOutBtn = document.getElementById('clockOutBtn');
+            const markLeaveBtn = document.getElementById('markLeaveBtn');
+            const clockInEl = document.getElementById('clockIn');
+            const clockOutEl = document.getElementById('clockOut');
+
+            if (todayAttendance) {
+                if (todayAttendance.status === 'leave') {
+                    statusBadge.textContent = 'On Leave';
+                    statusBadge.className = 'badge badge-leave';
+                    clockInBtn.disabled = true;
+                    clockOutBtn.disabled = true;
+                    markLeaveBtn.disabled = true;
+                    clockInEl.textContent = '-';
+                    clockOutEl.textContent = '-';
+                } else if (todayAttendance.status === 'active') {
+                    statusBadge.textContent = 'Active';
+                    statusBadge.className = 'badge badge-active';
+                    clockInBtn.disabled = true;
+                    clockOutBtn.disabled = false;
+                    markLeaveBtn.disabled = true;
+                    clockInEl.textContent = todayAttendance.clockIn;
+                    clockOutEl.textContent = '-';
+                } else {
+                    const hours = calculateHours(todayAttendance.clockIn, todayAttendance.clockOut);
+                    if (hours < 6) {
+                        statusBadge.textContent = 'Incomplete (Less than 6h)';
+                        statusBadge.className = 'badge badge-incomplete';
+                    } else {
+                        statusBadge.textContent = 'Inactive';
+                        statusBadge.className = 'badge badge-inactive';
+                    }
+                    clockInBtn.disabled = true;
+                    clockOutBtn.disabled = true;
+                    markLeaveBtn.disabled = true;
+                    clockInEl.textContent = todayAttendance.clockIn;
+                    clockOutEl.textContent = todayAttendance.clockOut;
+                }
+            } else {
+                statusBadge.textContent = 'Not Clocked In';
+                statusBadge.className = 'badge badge-inactive';
+                clockInBtn.disabled = false;
+                clockOutBtn.disabled = true;
+                markLeaveBtn.disabled = false;
+                clockInEl.textContent = '-';
+                clockOutEl.textContent = '-';
+            }
+        }
+
+        function clockIn() {
+            const now = new Date();
+            const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+            
+            if (day === 'Saturday' || day === 'Sunday') {
+                alert('Weekend! Attendance not required.');
+                return;
+            }
+
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            
+            attendance.push({
+                id: Date.now(),
+                employeeId: currentUser.id,
+                employeeName: currentUser.name,
+                employeeEmail: currentUser.email,
+                date: now,
+                clockIn: timeStr,
+                clockOut: null,
+                status: 'active'
+            });
+
+            updateEmployeeStatus();
+            loadEmployeeAttendance();
+        }
+
+        function clockOut() {
+            const today = new Date().toDateString();
+            const todayAttendance = attendance.find(a => 
+                a.employeeId === currentUser.id && 
+                new Date(a.date).toDateString() === today &&
+                a.status === 'active'
+            );
+
+            if (todayAttendance) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+                todayAttendance.clockOut = timeStr;
+                todayAttendance.status = 'inactive';
+
+                updateEmployeeStatus();
+                loadEmployeeAttendance();
+            }
+        }
+
+        function markLeave() {
+            if (!currentUser) {
+                alert('Please log in first');
+                return;
+            }
+
+            const now = new Date();
+            const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+            
+            if (day === 'Saturday' || day === 'Sunday') {
+                alert('Weekend! Attendance not required.');
+                return;
+            }
+
+            const today = now.toDateString();
+            const existing = attendance.find(a => 
+                a.employeeId === currentUser.id && 
+                new Date(a.date).toDateString() === today
+            );
+
+            if (existing) {
+                alert('Attendance already marked for today');
+                return;
+            }
+
+            if (confirm('Mark yourself on leave for today?')) {
+                attendance.push({
+                    id: Date.now(),
+                    employeeId: currentUser.id,
+                    employeeName: currentUser.name,
+                    employeeEmail: currentUser.email,
+                    date: now,
+                    clockIn: null,
+                    clockOut: null,
+                    status: 'leave'
+                });
+
+                updateEmployeeStatus();
+                loadEmployeeAttendance();
+                alert('Leave marked successfully!');
+            }
+        }
+
+        function calculateHours(clockIn, clockOut) {
+            if (!clockIn || !clockOut) return 0;
+            
+            const [inH, inM, inS] = clockIn.split(':').map(Number);
+            const [outH, outM, outS] = clockOut.split(':').map(Number);
+            
+            const inMinutes = inH * 60 + inM;
+            const outMinutes = outH * 60 + outM;
+            
+            return (outMinutes - inMinutes) / 60;
+        }
+
+        function loadEmployeeAttendance() {
+            const tbody = document.getElementById('employeeAttendanceBody');
+            const empAttendance = attendance
+                .filter(a => a.employeeId === currentUser.id)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 30);
+
+            tbody.innerHTML = empAttendance.map(a => {
+                const hours = calculateHours(a.clockIn, a.clockOut);
+                const hoursDisplay = hours > 0 ? hours.toFixed(1) : '-';
+                
+                let statusHTML = '';
+                if (a.status === 'leave') {
+                    statusHTML = '<span class="badge badge-leave">On Leave</span>';
+                } else if (a.status === 'active') {
+                    statusHTML = '<span class="badge badge-active">Active</span>';
+                } else {
+                    if (hours < 6) {
+                        statusHTML = '<span class="badge badge-incomplete">Incomplete</span>';
+                    } else {
+                        statusHTML = '<span class="badge badge-inactive">Inactive</span>';
+                    }
+                }
+
+                return `
+                    <tr>
+                        <td>${new Date(a.date).toLocaleDateString()}</td>
+                        <td>${a.clockIn || '-'}</td>
+                        <td>${a.clockOut || '-'}</td>
+                        <td>${hoursDisplay}</td>
+                        <td>${statusHTML}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateAdminStats() {
+            const today = new Date().toDateString();
+            const todayRecords = attendance.filter(a => new Date(a.date).toDateString() === today);
+            
+            const totalEmp = employees.filter(e => e.role === 'employee').length;
+            const activeToday = todayRecords.filter(a => a.status === 'active').length;
+            const onLeave = todayRecords.filter(a => a.status === 'leave').length;
+
+            document.getElementById('totalEmployees').textContent = totalEmp;
+            document.getElementById('activeToday').textContent = activeToday;
+            document.getElementById('onLeaveToday').textContent = onLeave;
+        }
+
+        function loadAllAttendance() {
+            const tbody = document.getElementById('adminAttendanceBody');
+            const sortedAttendance = [...attendance].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            tbody.innerHTML = sortedAttendance.map(a => {
+                const hours = calculateHours(a.clockIn, a.clockOut);
+                const hoursDisplay = hours > 0 ? hours.toFixed(1) : '-';
+                
+                let statusHTML = '';
+                if (a.status === 'leave') {
+                    statusHTML = '<span class="badge badge-leave">On Leave</span>';
+                } else if (a.status === 'active') {
+                    statusHTML = '<span class="badge badge-active">Active</span>';
+                } else {
+                    if (hours < 6) {
+                        statusHTML = '<span class="badge badge-incomplete">Incomplete</span>';
+                    } else {
+                        statusHTML = '<span class="badge badge-inactive">Inactive</span>';
+                    }
+                }
+
+                return `
+                    <tr>
+                        <td>${new Date(a.date).toLocaleDateString()}</td>
+                        <td>
+                            <div class="employee-name">${a.employeeName}</div>
+                            <div class="employee-email">${a.employeeEmail}</div>
+                        </td>
+                        <td>${a.clockIn || '-'}</td>
+                        <td>${a.clockOut || '-'}</td>
+                        <td>${hoursDisplay}</td>
+                        <td>${statusHTML}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadEmployeeList() {
+            const list = document.getElementById('employeeList');
+            const regularEmployees = employees.filter(e => e.role === 'employee');
+
+            list.innerHTML = regularEmployees.map(emp => {
+                const today = new Date().toDateString();
+                const todayRecord = attendance.find(a => 
+                    a.employeeId === emp.id && 
+                    new Date(a.date).toDateString() === today
+                );
+                
+                let statusBadge = '<span class="badge badge-inactive">Inactive</span>';
+                if (todayRecord) {
+                    if (todayRecord.status === 'active') {
+                        statusBadge = '<span class="badge badge-active">Active</span>';
+                    } else if (todayRecord.status === 'leave') {
+                        statusBadge = '<span class="badge badge-leave">On Leave</span>';
+                    }
+                }
+
+                return `
+                    <div class="employee-item">
+                        <div class="employee-info">
+                            <div class="employee-name">${emp.name}</div>
+                            <div class="employee-email">${emp.email}</div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span class="employee-role">Employee</span>
+                            ${statusBadge}
+                            <button onclick="removeEmployee(${emp.id})" class="btn btn-red">🗑</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'attendance') {
+                document.getElementById('attendanceTab').classList.remove('hidden');
+                document.getElementById('employeesTab').classList.add('hidden');
+                tabs[0].classList.add('active');
+            } else {
+                document.getElementById('attendanceTab').classList.add('hidden');
+                document.getElementById('employeesTab').classList.remove('hidden');
+                tabs[1].classList.add('active');
+            }
+        }
+
+        function openAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').classList.add('active');
+        }
+
+        function closeAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').classList.remove('active');
+            document.getElementById('addEmployeeForm').reset();
+            document.getElementById('addEmpError').textContent = '';
+        }
+
+        document.getElementById('addEmployeeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('empName').value;
+            const email = document.getElementById('empEmail').value;
+            const password = document.getElementById('empPassword').value;
+
+            if (employees.find(emp => emp.email === email)) {
+                document.getElementById('addEmpError').textContent = 'Email already exists';
+                return;
+            }
+
+            employees.push({
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                role: 'employee'
+            });
+
+            closeAddEmployeeModal();
+            updateAdminStats();
+            loadEmployeeList();
+        });
+
+        function removeEmployee(id) {
+            if (confirm('Are you sure you want to remove this employee?')) {
+                employees = employees.filter(emp => emp.id !== id);
+                attendance = attendance.filter(a => a.employeeId !== id);
+                updateAdminStats();
+                loadEmployeeList();
+                loadAllAttendance();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
